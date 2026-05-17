@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f1f3f5;
+      --text-main: #495057;
+      --radius: 12px;
+      --gap: 16px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      padding: 48px 32px 80px;
+    }
+
+    /* ── Header ── */
+    .header {
+      max-width: 900px;
+      margin: 0 auto 40px;
+    }
+
+    .header-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.15;
+      display: block;
+    }
+
+    .header-email {
+      font-size: 0.82rem;
+      color: var(--text-main);
+      display: inline-block;
+      margin-top: 4px;
+      cursor: pointer;
+      position: relative;
+      user-select: none;
+    }
+
+    .header-email:hover { text-decoration: underline; }
+
+    .copy-toast {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 100%;
+      margin-top: 4px;
+      background: var(--text-main);
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .copy-toast.show { display: block; }
+
+    /* ── Grid ── */
+    .grid-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+
+    /* ── Cell: 정사각형 크롭 ── */
+    .cell {
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      cursor: default;
+    }
+
+    .cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      transition: transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  object-fit 0s;
+    }
+
+    /* 호버: 셀 overflow를 visible로 바꾸고 이미지를 원본 비율로 */
+    .cell:hover {
+      overflow: visible;
+      z-index: 10;
+    }
+
+    .cell:hover img {
+      width: 100%;
+      height: auto;
+      object-fit: unset;
+      transform: scale(1.08);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <span class="header-name">Your Name</span>
+    <span class="header-email" id="emailBtn">
+      yourmail@example.com
+      <span class="copy-toast" id="copyToast">Copied!</span>
+    </span>
+  </header>
+
+  <div class="grid-wrap">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <script>
+    // ================================================================
+    // 이미지 추가 방법:
+    //   1. 레포 images/ 폴더에 파일 업로드
+    //   2. 아래 배열에 객체 추가
+    //
+    // src : 이미지 경로 (필수)
+    // pos : 크롭 기준점 (선택, 기본 'center')
+    //       'top' | 'bottom' | 'left' | 'right' | 'center' | '20% 80%'
+    //
+    // 최대 12장 (3행 4열)
+    // ================================================================
+    const IMAGES = [
+      // { src: 'images/work01.jpg', pos: 'center' },
+      // { src: 'images/work02.jpg', pos: 'top' },
+    ];
+    // ================================================================
+
+    const MAX = 12;
+    const grid = document.getElementById('grid');
+
+    IMAGES.slice(0, MAX).filter(Boolean).forEach(({ src, pos }) => {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.style.objectPosition = pos || 'center';
+
+      // 우클릭 금지
+      img.addEventListener('contextmenu', e => e.preventDefault());
+      cell.addEventListener('contextmenu', e => e.preventDefault());
+
+      cell.appendChild(img);
+      grid.appendChild(cell);
+    });
+
+    // 이메일 복사
+    const emailBtn = document.getElementById('emailBtn');
+    const copyToast = document.getElementById('copyToast');
+    const EMAIL = 'yourmail@example.com'; // ← 여기도 이메일 수정
+
+    emailBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(EMAIL).then(() => {
+        copyToast.classList.add('show');
+        setTimeout(() => copyToast.classList.remove('show'), 1800);
+      });
+    });
+  </script>
+</body>
+</html>
