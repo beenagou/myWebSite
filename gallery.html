@@ -118,9 +118,9 @@
 <body>
 
   <header class="header">
-    <span class="header-name">Your Name</span>
+    <span class="header-name">Beenagou</span>
     <span class="header-email" id="emailBtn">
-      yourmail@example.com
+      beenagou0@gmail.com
       <span class="copy-toast" id="copyToast">Copied!</span>
     </span>
   </header>
@@ -142,8 +142,9 @@
     // 최대 12장 (3행 4열)
     // ================================================================
     const IMAGES = [
-      // { src: 'images/work01.jpg', pos: 'center' },
-      // { src: 'images/work02.jpg', pos: 'top' },
+      { src: 'images/work01.jpg', pos: 'center' },
+      { src: 'images/work02.jpg', pos: 'top' },
+      { src: 'images/work03.jpg', pos: 'center' },
     ];
     // ================================================================
 
@@ -171,7 +172,7 @@
     // 이메일 복사
     const emailBtn = document.getElementById('emailBtn');
     const copyToast = document.getElementById('copyToast');
-    const EMAIL = 'yourmail@example.com'; // ← 여기도 이메일 수정
+    const EMAIL = 'beenagou0@gmail.com'; // ← 여기도 이메일 수정
 
     emailBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(EMAIL).then(() => {
